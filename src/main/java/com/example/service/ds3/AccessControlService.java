@@ -1,6 +1,5 @@
 package com.example.service.ds3;
 
-
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -19,7 +18,11 @@ public class AccessControlService {
 		return accessControlRepository.findAll();
 	}
 	
-	public Optional<AccessControl> findByDoubleKey(AccessControlKey key) {
-		return accessControlRepository.findByDoubleKey(key.getFunctionID(), key.getUserID());
+	public boolean checkAuthor(AccessControlKey key) {
+		Optional<AccessControl> access = accessControlRepository.findByDoubleKey(key.getFunctionID(), key.getUserID());
+		if(access.isPresent() == true)
+			if(access.get().isStatus() == true)
+				return true;
+		return false;
 	}
 }
