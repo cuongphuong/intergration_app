@@ -31,7 +31,7 @@ public class PayRates {
 	@Column(name="PT_Level_C", nullable=false)
 	private BigDecimal pT_Level_C;
 	
-	@OneToMany(mappedBy="payRate", fetch=FetchType.LAZY)
+	@OneToMany(mappedBy="payRate", fetch=FetchType.EAGER)
 	private List<Employee> employees;
 
 	public int getIdPay_Rates() {

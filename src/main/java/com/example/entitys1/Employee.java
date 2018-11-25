@@ -24,7 +24,7 @@ public class Employee {
 	})
 	private EmployeePK pk;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne(fetch=FetchType.EAGER)
 	@JoinColumn(name="Pay_Rates_idPay_Rates", insertable=false, updatable=false)
 	private PayRates payRate;
 	

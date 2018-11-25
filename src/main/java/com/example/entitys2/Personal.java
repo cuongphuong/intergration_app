@@ -5,6 +5,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="Personal")
 public class Personal implements Serializable{
@@ -65,13 +67,16 @@ public class Personal implements Serializable{
 	//end set relationship
 
 	@OneToOne(fetch=FetchType.LAZY, mappedBy="personal")
+	@JsonIgnore
 	private Employment employment;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
 	@JoinColumn(name="Benefit_Plans", nullable=false, insertable=false, updatable=false)
+	@JsonIgnore
 	private BenefitPlan benefitPlan;
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="personal")
+	@JsonIgnore
 	private List<JobHistory> jobHistorys;
 
 	public Employment getEmployment() {

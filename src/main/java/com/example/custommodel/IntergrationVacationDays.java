@@ -1,9 +1,6 @@
 package com.example.custommodel;
 
-import java.math.BigDecimal;
-
-public class IntergrationTotalEarnings {
-	//Thông tin tích hợp tổng thu nhập nhân viên
+public class IntergrationVacationDays {
 	private long employeeID;
 	private String fistName;
 	private String lastName;
@@ -12,7 +9,7 @@ public class IntergrationTotalEarnings {
 	private String address1;
 	private String address2;
 	private String phoneNumber;
-	private BigDecimal totalEarnings;
+	private int vacationDays;
 	public long getEmployeeID() {
 		return employeeID;
 	}
@@ -61,14 +58,14 @@ public class IntergrationTotalEarnings {
 	public void setPhoneNumber(String phoneNumber) {
 		this.phoneNumber = phoneNumber;
 	}
-	public BigDecimal getTotalEarnings() {
-		return totalEarnings;
+	public int getVacationDays() {
+		return vacationDays;
 	}
-	public void setTotalEarnings(BigDecimal totalEarnings) {
-		this.totalEarnings = totalEarnings;
+	public void setVacationDays(int vacationDays) {
+		this.vacationDays = vacationDays;
 	}
-	public IntergrationTotalEarnings(long employeeID, String fistName, String lastName, Boolean gender,
-			String ethnicity, String address1, String address2, String phoneNumber) {
+	public IntergrationVacationDays(long employeeID, String fistName, String lastName, Boolean gender, String ethnicity,
+			String address1, String address2, String phoneNumber) {
 		super();
 		this.employeeID = employeeID;
 		this.fistName = fistName;
@@ -79,6 +76,4 @@ public class IntergrationTotalEarnings {
 		this.address2 = address2;
 		this.phoneNumber = phoneNumber;
 	}
-	
-	
 }
