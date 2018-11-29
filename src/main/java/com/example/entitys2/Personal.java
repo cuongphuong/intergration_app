@@ -13,6 +13,7 @@ public class Personal implements Serializable{
 	private static final long serialVersionUID = 1L;
 
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="Employee_ID", nullable=false)
 	private long employee_ID;
 	
@@ -71,7 +72,7 @@ public class Personal implements Serializable{
 	private Employment employment;
 	
 	@ManyToOne(fetch=FetchType.LAZY)
-	@JoinColumn(name="Benefit_Plans", nullable=false, insertable=false, updatable=false)
+	@JoinColumn(name="Benefit_Plans", nullable=true, insertable=false, updatable=false)
 	@JsonIgnore
 	private BenefitPlan benefitPlan;
 	

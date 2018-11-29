@@ -21,4 +21,8 @@ public class PersonalService{
 	public List<Personal> getPersonalBySegmentID(long firstID, long lastID){
 		return personalRepository.getPersonalBySegmentID(firstID, lastID);
 	}
+	
+	public Personal save(Personal personal) {
+		return personalRepository.save(personal);
+	}
 }

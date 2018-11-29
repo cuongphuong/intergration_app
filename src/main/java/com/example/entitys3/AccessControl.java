@@ -32,7 +32,7 @@ public class AccessControl implements Serializable{
 	
 	@Column(name="status", nullable=false)
 	private boolean status;
-
+	
 	public boolean isStatus() {
 		return status;
 	}
@@ -63,4 +63,20 @@ public class AccessControl implements Serializable{
 	}
 	
 	
+	
+	public AccessControlKey getAccessControlKey() {
+		return accessControlKey;
+	}
+
+	public void setAccessControlKey(AccessControlKey accessControlKey) {
+		this.accessControlKey = accessControlKey;
+	}
+
+	public AccessControl(AccessControlKey accessControlKey, Functions function, Users user, boolean status) {
+		super();
+		this.accessControlKey = accessControlKey;
+		this.function = function;
+		this.user = user;
+		this.status = status;
+	}
 }

@@ -14,4 +14,7 @@ public interface AccessControlRepository extends CrudRepository<AccessControl, I
 	
 	@Query("select d from AccessControl d where d.functionID = :function_id and d.userID = :user_id")
 	public Optional<AccessControl> findByDoubleKey(@Param("function_id") int functionID, @Param("user_id") int userID);
+	
+	@Query("select d from AccessControl d where d.userID = :user_id")
+	public Iterable<AccessControl> findAllRolesByUser(@Param("user_id") int userID);
 }

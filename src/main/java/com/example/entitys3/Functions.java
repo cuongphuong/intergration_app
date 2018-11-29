@@ -4,6 +4,8 @@ import java.util.List;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 @Entity
 @Table(name="tb_function")
 public class Functions {
@@ -18,10 +20,12 @@ public class Functions {
 	@Column(name="module_id", nullable=false)
 	private int moduleId;
 
+	@JsonIgnore
 	@JoinColumn(name="module_id", updatable=false, insertable=false)
 	@ManyToOne(fetch=FetchType.LAZY)
 	private Modules module;
 	
+	@JsonIgnore
 	@OneToMany(mappedBy="function")
 	private List<AccessControl> accessControls;
 

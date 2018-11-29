@@ -25,4 +25,16 @@ public class AccessControlService {
 				return true;
 		return false;
 	}
+	
+	public Iterable<AccessControl> findAllRolesByUser(int userID){
+		return accessControlRepository.findAllRolesByUser(userID);
+	}
+	
+	public AccessControl save(AccessControl accessControl) {
+		return accessControlRepository.save(accessControl);
+	}
+	
+	public Iterable<AccessControl> saveAll(Iterable<AccessControl> lstAccessControl) {
+		return accessControlRepository.saveAll(lstAccessControl);
+	}
 }

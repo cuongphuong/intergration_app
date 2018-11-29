@@ -11,6 +11,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 @Table(name="tb_users")
 public class Users{
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="user_id", nullable=false)
 	private int userID;
 	
@@ -22,6 +23,9 @@ public class Users{
 	
 	@Column(name="password", nullable=false)
 	private String password;
+	
+	@Column(name="enabled", nullable=false)
+	private boolean enable;
 	
 	@JsonIgnore
 	@OneToMany(mappedBy="user")
@@ -67,17 +71,26 @@ public class Users{
 		this.accessControls = accessControls;
 	}
 
+	public boolean isEnable() {
+		return enable;
+	}
+
+	public void setEnable(boolean enable) {
+		this.enable = enable;
+	}
+
 	public Users() {
 		super();
 		// TODO Auto-generated constructor stub
 	}
 
-	public Users(int userID, String fullName, String userName, String password, List<AccessControl> accessControls) {
+	public Users(String fullName, String userName, String password, boolean enable) {
 		super();
-		this.userID = userID;
 		this.fullName = fullName;
 		this.userName = userName;
 		this.password = password;
-		this.accessControls = accessControls;
+		this.enable = enable;
 	}
+
+	
 }
