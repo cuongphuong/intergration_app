@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.entitys3.AccessControl;
@@ -50,4 +51,14 @@ public class HomeController {
 //			return "Not right to access";
 //		}
 //	}
+	@RequestMapping(value = "checkuser", method = RequestMethod.GET)
+	public boolean roles(@RequestParam("username") String username) {
+		Users u = userService.findByUserName(username).get();
+		if(userService.existsById(u.getUserID()) == true) {
+			return true;
+		}
+		return false;
+		
+	}
+	
 }

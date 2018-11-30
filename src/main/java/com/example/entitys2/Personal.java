@@ -14,7 +14,7 @@ public class Personal implements Serializable{
 
 	@Id
 	@GeneratedValue(strategy=GenerationType.IDENTITY)
-	@Column(name="Employee_ID", nullable=false)
+	@Column(name="Employee_ID")
 	private long employee_ID;
 	
 	@Column(name="First_Name", nullable=true)
@@ -59,7 +59,7 @@ public class Personal implements Serializable{
 	@Column(name="Gender", nullable=true)
 	private Boolean gender;
 	
-	@Column(name="Shareholder_Status", nullable=true)
+	@Column(name="Shareholder_Status", nullable=false)
 	private Boolean shareholder_Status;
 	
 	@Column(name="Ethnicity", nullable=true)

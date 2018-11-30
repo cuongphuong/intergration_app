@@ -45,7 +45,7 @@ public class InfomationController {
 		//check acess control
 		if(accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
 			List<Employee> lstEmployee = employeeService.findByPage(page);
-			List<Personal> lstPersonal = personalService.getPersonalBySegmentID(lstEmployee.get(0).getEmployee_Number(), lstEmployee.get(lstEmployee.size() - 1).getEmployee_Number());
+			List<Personal> lstPersonal = personalService.getPersonalBySegmentID(lstEmployee.get(0).getPk().getEmployee_Number(), lstEmployee.get(lstEmployee.size() - 1).getPk().getEmployee_Number());
 			
 			// merge two list
 			
@@ -57,8 +57,8 @@ public class InfomationController {
 			}
 			
 			for(Employee iEmployee : lstEmployee) {
-				if(mergeLst.containsKey(Long.valueOf(iEmployee.getEmployee_Number())) == true) {
-					mergeLst.get(Long.valueOf(iEmployee.getEmployee_Number())).setTotalEarnings(iEmployee.getPayRate().getPay_Amount());
+				if(mergeLst.containsKey(Long.valueOf(iEmployee.getPk().getEmployee_Number())) == true) {
+					mergeLst.get(Long.valueOf(iEmployee.getPk().getEmployee_Number())).setTotalEarnings(iEmployee.getPayRate().getPay_Amount());
 				}
 			}
 			
@@ -73,7 +73,7 @@ public class InfomationController {
 		//check acess control
 		if(accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
 			List<Employee> lstEmployee = employeeService.findByPage(page);
-			List<Personal> lstPersonal = personalService.getPersonalBySegmentID(lstEmployee.get(0).getEmployee_Number(), lstEmployee.get(lstEmployee.size() - 1).getEmployee_Number());
+			List<Personal> lstPersonal = personalService.getPersonalBySegmentID(lstEmployee.get(0).getPk().getEmployee_Number(), lstEmployee.get(lstEmployee.size() - 1).getPk().getEmployee_Number());
 			
 			// merge two list
 			
@@ -85,11 +85,26 @@ public class InfomationController {
 			}
 			
 			for(Employee iEmployee : lstEmployee) {
-				if(mergeLst.containsKey(Long.valueOf(iEmployee.getEmployee_Number())) == true) {
-					mergeLst.get(Long.valueOf(iEmployee.getEmployee_Number())).setVacationDays(iEmployee.getVacation_Days());
+				if(mergeLst.containsKey(Long.valueOf(iEmployee.getPk().getEmployee_Number())) == true) {
+					mergeLst.get(Long.valueOf(iEmployee.getPk().getEmployee_Number())).setVacationDays(iEmployee.getVacation_Days());
 				}
 			}
 			return mergeLst;
 		} else return null;
 	}
+	
+	
+	@RequestMapping(value="benefit-plans", method = RequestMethod.GET)
+	public void getBenefitPlan(Principal principal, @RequestParam("page") int page) {
+		final int FUNCTION_ID = 3; //function_tong_thu_nhap_nhan_vien
+		Users u = userService.findByUserName(principal.getName()).get();
+		//check acess control
+		if(accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
+			
+		} else {
+			
+		}
+		
+	}
+	
 }

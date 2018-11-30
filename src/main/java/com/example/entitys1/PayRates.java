@@ -10,6 +10,7 @@ import javax.persistence.*;
 public class PayRates {
 	
 	@Id
+	@GeneratedValue(strategy=GenerationType.IDENTITY)
 	@Column(name="idPay_Rates", nullable=false)
 	private int idPay_Rates;
 	
@@ -31,7 +32,7 @@ public class PayRates {
 	@Column(name="PT_Level_C", nullable=false)
 	private BigDecimal pT_Level_C;
 	
-	@OneToMany(mappedBy="payRate", fetch=FetchType.EAGER)
+	@OneToMany(mappedBy="payRate")
 	private List<Employee> employees;
 
 	public int getIdPay_Rates() {

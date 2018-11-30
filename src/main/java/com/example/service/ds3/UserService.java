@@ -21,8 +21,16 @@ public class UserService {
 		return userRepository.findById(id);
 	}
 	
+	public boolean existsById(int id) {
+		return userRepository.existsById(id);
+	}
+	
 	public Users save(Users user) {
 		userRepository.save(user);
 		return user;
+	}
+	
+	public void deleteByID(int id) {
+		userRepository.deleteById(id);
 	}
 }

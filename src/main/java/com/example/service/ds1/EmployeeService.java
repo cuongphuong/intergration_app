@@ -1,6 +1,7 @@
 package com.example.service.ds1;
 
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.PageRequest;
@@ -20,5 +21,21 @@ public class EmployeeService {
 	
 	public List<Employee> findByPage(int page){
 		return employeeRepository.findByPage(PageRequest.of(page, 5));
+	}
+	
+	public Employee save(Employee employee) {
+		return employeeRepository.save(employee);
+	}
+	
+	public Optional<Employee> findByID(int id) {
+		return employeeRepository.findById(id);
+	}
+	
+	public boolean existsById(int id) {
+		return employeeRepository.existsById(id);
+	}
+	
+	public void deleteByID(int id) {
+		employeeRepository.deleteById(id);
 	}
 }

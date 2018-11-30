@@ -17,4 +17,7 @@ public interface AccessControlRepository extends CrudRepository<AccessControl, I
 	
 	@Query("select d from AccessControl d where d.userID = :user_id")
 	public Iterable<AccessControl> findAllRolesByUser(@Param("user_id") int userID);
+	
+	@Query("update AccessControl a set a.status = :status where a.functionID = :function_id and a.userID = :user_id")
+	public void updateStatusByKey(@Param("status") boolean status, @Param("function_id") int functionID, @Param("user_id") int userID);
 }

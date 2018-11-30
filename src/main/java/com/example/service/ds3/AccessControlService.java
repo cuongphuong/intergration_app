@@ -37,4 +37,8 @@ public class AccessControlService {
 	public Iterable<AccessControl> saveAll(Iterable<AccessControl> lstAccessControl) {
 		return accessControlRepository.saveAll(lstAccessControl);
 	}
+	
+	public void deleteAllByList(Iterable<AccessControl> lst) {
+		accessControlRepository.deleteAll(lst);
+	}
 }

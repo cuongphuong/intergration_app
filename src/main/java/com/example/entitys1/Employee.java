@@ -6,28 +6,53 @@ import javax.persistence.*;
 
 @Entity
 @Table(name="employee")
-@IdClass(EmployeePK.class)
 public class Employee {
-	
-	@Id
-	@Column(name="Employee_Number", nullable=false)
-	private int employee_Number;
-	
-	@Id
-	@Column(name="Pay_Rates_idPay_Rates")
-	private int pay_Rates_idPay_Rates;
-	
-	@Id
-	@AttributeOverrides({
-		@AttributeOverride(name="employee_Number", column = @Column(name="idEmployee")),
-		@AttributeOverride(name="pay_Rates_idPay_Rates", column = @Column(name="Pay_Rates_idPay_Rates"))
-	})
+	@EmbeddedId
 	private EmployeePK pk;
 	
-	@ManyToOne(fetch=FetchType.EAGER)
-	@JoinColumn(name="Pay_Rates_idPay_Rates", insertable=false, updatable=false)
+	@ManyToOne
+	@MapsId("idPay_Rates")
+	@JoinColumn(name="Pay_Rates_idPay_Rates", referencedColumnName="idPay_Rates", insertable=false, updatable=false)
 	private PayRates payRate;
 	
+	@Column(name="idEmployee")
+	private int idEmployee;
+	
+//	@Column(name="Employee_Number", insertable=false, updatable=false)
+//	private int employee_Number;
+//	
+//	@Column(name="Pay_Rates_idPay_Rates", insertable=false, updatable=false)
+//	private int pay_Rates_idPay_Rates;
+
+	public int getIdEmployee() {
+		return idEmployee;
+	}
+
+	public void setIdEmployee(int idEmployee) {
+		this.idEmployee = idEmployee;
+	}
+
+	@Column(name="Last_Name", nullable=false)
+	private String last_Name;
+	
+	@Column(name="First_Name", nullable=false)
+	private String first_Name;
+	
+	@Column(name="SSN", nullable=false)
+	private long SSN;
+	
+	@Column(name="Pay_Rate", nullable=true)
+	private String pay_Rate;
+	
+	
+	@Column(name="Vacation_Days", nullable=true)
+	private int vacation_Days;
+	
+	@Column(name="Paid_To_Date", nullable=true)
+	private BigDecimal paid_To_Date;
+	
+	@Column(name="Paid_Last_Year", nullable=true)
+	private BigDecimal paid_Last_Year;
 	
 	public PayRates getPayRate() {
 		return payRate;
@@ -45,43 +70,21 @@ public class Employee {
 		this.pk = pk;
 	}
 
-	@Column(name="Last_Name", nullable=false)
-	private String last_Name;
-	
-	@Column(name="First_Name", nullable=false)
-	private String first_Name;
-	
-	@Column(name="SSN", nullable=false)
-	private long SSN;
-	
-	@Column(name="Pay_Rate", nullable=false)
-	private String pay_Rate;
-	
-	
-	@Column(name="Vacation_Days", nullable=false)
-	private int vacation_Days;
-	
-	@Column(name="Paid_To_Date", nullable=false)
-	private BigDecimal paid_To_Date;
-	
-	@Column(name="Paid_Last_Year", nullable=false)
-	private BigDecimal paid_Last_Year;
-
-	public int getEmployee_Number() {
-		return employee_Number;
-	}
-
-	public void setEmployee_Number(int employee_Number) {
-		this.employee_Number = employee_Number;
-	}
-
-	public int getPay_Rates_idPay_Rates() {
-		return pay_Rates_idPay_Rates;
-	}
-
-	public void setPay_Rates_idPay_Rates(int pay_Rates_idPay_Rates) {
-		this.pay_Rates_idPay_Rates = pay_Rates_idPay_Rates;
-	}
+//	public int getEmployee_Number() {
+//		return employee_Number;
+//	}
+//
+//	public void setEmployee_Number(int employee_Number) {
+//		this.employee_Number = employee_Number;
+//	}
+//
+//	public int getPay_Rates_idPay_Rates() {
+//		return pay_Rates_idPay_Rates;
+//	}
+//
+//	public void setPay_Rates_idPay_Rates(int pay_Rates_idPay_Rates) {
+//		this.pay_Rates_idPay_Rates = pay_Rates_idPay_Rates;
+//	}
 
 	public String getLast_Name() {
 		return last_Name;
@@ -143,4 +146,18 @@ public class Employee {
 		super();
 		// TODO Auto-generated constructor stub
 	}
+
+	public Employee(EmployeePK pk, int idEmployee, String last_Name,
+			String first_Name, long sSN) {
+		super();
+		this.pk = pk;
+		this.idEmployee = idEmployee;
+		this.last_Name = last_Name;
+		this.first_Name = first_Name;
+		SSN = sSN;
+	}
+	
+	
+	
+	
 }

@@ -3,28 +3,15 @@ package com.example.entitys1;
 import java.io.Serializable;
 
 import javax.persistence.*;
-
 @Embeddable
 public class EmployeePK implements Serializable{
 	private static final long serialVersionUID = 1L;
 
-	@Id
-	@Column(name="Employee_Number", nullable=false)
+	@Column(name="Employee_Number")
 	private int employee_Number;
 	
-	@Id
-	@Column(name="Pay_Rates_idPay_Rates", insertable=false, updatable=false)
+	@Column(name="Pay_Rates_idPay_Rates")
 	private int pay_Rates_idPay_Rates;
-
-	public EmployeePK(int employee_Number, int pay_Rates_idPay_Rates) {
-		super();
-		this.employee_Number = employee_Number;
-		this.pay_Rates_idPay_Rates = pay_Rates_idPay_Rates;
-	}
-
-	public EmployeePK() {
-		super();
-	}
 
 	public int getEmployee_Number() {
 		return employee_Number;
@@ -40,5 +27,16 @@ public class EmployeePK implements Serializable{
 
 	public void setPay_Rates_idPay_Rates(int pay_Rates_idPay_Rates) {
 		this.pay_Rates_idPay_Rates = pay_Rates_idPay_Rates;
+	}
+
+	public EmployeePK(int employee_Number, int pay_Rates_idPay_Rates) {
+		super();
+		this.employee_Number = employee_Number;
+		this.pay_Rates_idPay_Rates = pay_Rates_idPay_Rates;
+	}
+
+	public EmployeePK() {
+		super();
+		// TODO Auto-generated constructor stub
 	}
 }
