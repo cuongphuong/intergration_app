@@ -5,7 +5,7 @@ import java.util.List;
 import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-
+import org.apache.commons.text.StringEscapeUtils;
 @Entity
 @Table(name="tb_function")
 public class Functions {
@@ -19,6 +19,12 @@ public class Functions {
 	
 	@Column(name="module_id", nullable=false)
 	private int moduleId;
+	
+	@Column(name="image", nullable=false)
+	private String image;
+	
+	@Column(name="url", nullable=false)
+	private String url;
 
 	@JsonIgnore
 	@JoinColumn(name="module_id", updatable=false, insertable=false)
@@ -32,6 +38,32 @@ public class Functions {
 	public int getFunctionID() {
 		return functionID;
 	}
+	
+	
+
+	public String getImage() {
+		return StringEscapeUtils.unescapeHtml4(image);
+	}
+
+
+
+	public void setImage(String image) {
+		this.image = image;
+	}
+
+
+
+	public String getUrl() {
+		return url;
+	}
+
+
+
+	public void setUrl(String url) {
+		this.url = url;
+	}
+
+
 
 	public void setFunctionID(int functionID) {
 		this.functionID = functionID;

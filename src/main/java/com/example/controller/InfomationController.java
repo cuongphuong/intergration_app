@@ -68,7 +68,7 @@ public class InfomationController {
 	
 	@RequestMapping(value="vacationdays", method = RequestMethod.GET)
 	public Map<Long, IntergrationVacationDays> getVacationDays(Principal principal, @RequestParam("page") int page) {
-		final int FUNCTION_ID = 1; //function_tong_thu_nhap_nhan_vien
+		final int FUNCTION_ID = 2; //function_tong_ ngày nghĩ nhân viên
 		Users u = userService.findByUserName(principal.getName()).get();
 		//check acess control
 		if(accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
@@ -96,7 +96,7 @@ public class InfomationController {
 	
 	@RequestMapping(value="benefit-plans", method = RequestMethod.GET)
 	public void getBenefitPlan(Principal principal, @RequestParam("page") int page) {
-		final int FUNCTION_ID = 3; //function_tong_thu_nhap_nhan_vien
+		final int FUNCTION_ID = 3; //function_lợi ích kế hoạch
 		Users u = userService.findByUserName(principal.getName()).get();
 		//check acess control
 		if(accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {

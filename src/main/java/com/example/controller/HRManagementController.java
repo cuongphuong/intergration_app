@@ -47,7 +47,7 @@ public class HRManagementController {
 	
 	@RequestMapping(value = "add-employee", method = RequestMethod.POST)
 	public Personal addEmployee(Principal principal, @RequestBody Personal personal) {
-		final int FUNCTION_ID = 8;
+		final int FUNCTION_ID = 9; // thêm nhân viên mới
 		Users u = userService.findByUserName(principal.getName()).get();
 		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
 			Personal resPersonal = personalService.save(personal);
@@ -60,7 +60,7 @@ public class HRManagementController {
 	@RequestMapping(value = "update-to-payrol", method = RequestMethod.POST)
 	@Transactional(rollbackFor = PersonalToEmployeePayrateException.class)
 	public Employee updateToPayrol(Principal principal, @RequestBody EmployeePayratesSet data) {
-		final int FUNCTION_ID = 8;
+		final int FUNCTION_ID = 17;
 		Users u = userService.findByUserName(principal.getName()).get();
 		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
 			Personal pn = personalService.findByID(data.getEmployeeID()).get();
@@ -78,17 +78,24 @@ public class HRManagementController {
 	}
 	
 	@DeleteMapping("delete-employee/{id}")
-	public int deleteEmployee(@PathVariable long id) {
-		int count = 0;
-		if (personalService.existsById(id) == true) {
-			personalService.deleteByID(id);
-			count++;
+	public int deleteEmployee(Principal principal, @PathVariable long id) {
+		final int FUNCTION_ID = 11;
+		Users u = userService.findByUserName(principal.getName()).get();
+		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
+			int count = 0;
+			if (personalService.existsById(id) == true) {
+				personalService.deleteByID(id);
+				count++;
+			}
+			
+			if (employeeService.existsById((int)id) == true) {
+				employeeService.deleteByID((int)id);
+				count++;
+			}
+			return count;
+		} else {
+			return 0;
 		}
 		
-		if (employeeService.existsById((int)id) == true) {
-			employeeService.deleteByID((int)id);
-			count++;
-		}
-		return count;
 	}
 }

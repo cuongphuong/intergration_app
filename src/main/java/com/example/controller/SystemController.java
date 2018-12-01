@@ -42,7 +42,7 @@ public class SystemController {
 	@Transactional(value = "ds3TransactionManager", rollbackFor = AddUserAndRolesException.class)
 	@RequestMapping(value = "create-user", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Iterable<AccessControl> saveUser(Principal principal, @RequestBody UserRolesCreate object) {
-		final int FUNCTION_ID = 8;
+		final int FUNCTION_ID = 13; //thêm user hệ thống
 		Users u = userService.findByUserName(principal.getName()).get();
 		// check permission
 		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
@@ -74,15 +74,23 @@ public class SystemController {
 	}
 	
 	@DeleteMapping("delete-user/{id}")
-	public boolean deleteUser(@PathVariable int id) {
-		if (userService.existsById(id) == true) {
-			Iterable<AccessControl> a = accessControlService.findAllRolesByUser(id);
-			accessControlService.deleteAllByList(a);
-			userService.deleteByID(id);
-			return true;
+	public boolean deleteUser(Principal principal, @PathVariable int id) {
+		final int FUNCTION_ID = 15; // xóa user hệ thống
+		Users u = userService.findByUserName(principal.getName()).get();
+		// check permission
+		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
+			if (userService.existsById(id) == true) {
+				Iterable<AccessControl> a = accessControlService.findAllRolesByUser(id);
+				accessControlService.deleteAllByList(a);
+				userService.deleteByID(id);
+				return true;
+			} else {
+				return false;
+			}
 		} else {
 			return false;
 		}
+		
 	}
 	
 //	@PutMapping("update-access-control/{userid}")
