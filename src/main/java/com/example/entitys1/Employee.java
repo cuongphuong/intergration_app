@@ -10,6 +10,9 @@ public class Employee {
 	@EmbeddedId
 	private EmployeePK pk;
 	
+	@Column(name="Employee_Number", insertable=false, updatable=false)
+	private int employee_Number;
+	
 	@ManyToOne
 	@MapsId("idPay_Rates")
 	@JoinColumn(name="Pay_Rates_idPay_Rates", referencedColumnName="idPay_Rates", insertable=false, updatable=false)

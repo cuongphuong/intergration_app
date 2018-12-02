@@ -4,6 +4,7 @@ import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.PageRequest;
 import org.springframework.stereotype.Service;
 
 import com.example.entitys2.Personal;
@@ -37,5 +38,9 @@ public class PersonalService{
 	
 	public boolean existsById(long id) {
 		return personalRepository.existsById(id);
+	}
+	
+	public List<Personal> findByPage(int page){
+		return personalRepository.findByPage(PageRequest.of(page, 5));
 	}
 }

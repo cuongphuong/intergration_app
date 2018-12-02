@@ -10,6 +10,7 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -78,19 +79,32 @@ public class SystemController {
 		final int FUNCTION_ID = 15; // xóa user hệ thống
 		Users u = userService.findByUserName(principal.getName()).get();
 		// check permission
+		Iterable<AccessControl> a = accessControlService.findAllRolesByUser(id);
+		
 		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
-			if (userService.existsById(id) == true) {
-				Iterable<AccessControl> a = accessControlService.findAllRolesByUser(id);
-				accessControlService.deleteAllByList(a);
-				userService.deleteByID(id);
-				return true;
-			} else {
-				return false;
-			}
+//			if (userService.existsById(id) == true) {
+//				
+//			} else {
+//				return false;
+//			}
+			accessControlService.deleteAllByList(a);
+			userService.deleteByID(id);
+			return true;
 		} else {
 			return false;
 		}
-		
+	}
+	
+	@GetMapping("lst-user")
+	public Iterable<Users> listUser(Principal principal) {
+		final int FUNCTION_ID = 18; //lấy danh sasch user
+		Users u = userService.findByUserName(principal.getName()).get();
+		// check permission
+		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
+			return userService.findAll();
+		} else {
+			return null;
+		}
 	}
 	
 //	@PutMapping("update-access-control/{userid}")

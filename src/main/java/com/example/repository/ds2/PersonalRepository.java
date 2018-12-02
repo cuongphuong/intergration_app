@@ -2,6 +2,7 @@ package com.example.repository.ds2;
 
 import java.util.List;
 
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.CrudRepository;
 import org.springframework.data.repository.query.Param;
@@ -14,5 +15,7 @@ public interface PersonalRepository extends CrudRepository<Personal, Long>{
 	
 	@Query("select c from Personal c where c.employee_ID >= :firstID and c.employee_ID <= :lastID")
 	public List<Personal> getPersonalBySegmentID(@Param("firstID") long firstID, @Param("lastID") long lastID);
-	
+
+	@Query("select e from Personal e")
+	public List<Personal> findByPage(Pageable page);
 }

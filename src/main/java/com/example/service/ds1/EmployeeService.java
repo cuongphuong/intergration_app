@@ -38,4 +38,8 @@ public class EmployeeService {
 	public void deleteByID(int id) {
 		employeeRepository.deleteById(id);
 	}
+	
+	public List<Employee> getPersonalBySegmentID(int firstID, int lastID){
+		return employeeRepository.getEmployeeBySegmentID(firstID, lastID);
+	}
 }

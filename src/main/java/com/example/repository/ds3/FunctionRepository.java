@@ -12,6 +12,6 @@ import com.example.entitys3.Functions;
 @Repository("functionRepository")
 public interface FunctionRepository extends CrudRepository<Functions, Integer> {
 	
-	@Query("select f from Functions f JOIN f.accessControls a where a.status = true and a.userID = :userID")
+	@Query("select f from Functions f JOIN f.accessControls a where a.status = true and a.userID = :userID and f.isshow = true")
 	public List<Functions> findFunctionTrue(@Param("userID") int userID);
 }

@@ -1,18 +1,24 @@
-package com.example.controller;
+﻿package com.example.controller;
 
 import java.security.Principal;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.custommodel.EmployeePayratesSet;
+import com.example.custommodel.IntergrationInfoPersonal;
 import com.example.entitys1.Employee;
 import com.example.entitys1.EmployeePK;
 import com.example.entitys1.PayRates;
@@ -32,10 +38,10 @@ import com.example.service.ds3.UserService;
 public class HRManagementController {
 	@Autowired
 	private UserService userService;
-	
+
 	@Autowired
 	private AccessControlService accessControlService;
-	
+
 	@Autowired
 	private PersonalService personalService;
 
@@ -44,7 +50,7 @@ public class HRManagementController {
 
 	@Autowired
 	private PayRateService payRateService;
-	
+
 	@RequestMapping(value = "add-employee", method = RequestMethod.POST)
 	public Personal addEmployee(Principal principal, @RequestBody Personal personal) {
 		final int FUNCTION_ID = 9; // thêm nhân viên mới
@@ -56,7 +62,7 @@ public class HRManagementController {
 			return null;
 		}
 	}
-	
+
 	@RequestMapping(value = "update-to-payrol", method = RequestMethod.POST)
 	@Transactional(rollbackFor = PersonalToEmployeePayrateException.class)
 	public Employee updateToPayrol(Principal principal, @RequestBody EmployeePayratesSet data) {
@@ -76,7 +82,7 @@ public class HRManagementController {
 			return null;
 		}
 	}
-	
+
 	@DeleteMapping("delete-employee/{id}")
 	public int deleteEmployee(Principal principal, @PathVariable long id) {
 		final int FUNCTION_ID = 11;
@@ -87,15 +93,57 @@ public class HRManagementController {
 				personalService.deleteByID(id);
 				count++;
 			}
-			
-			if (employeeService.existsById((int)id) == true) {
-				employeeService.deleteByID((int)id);
+
+			if (employeeService.existsById((int) id) == true) {
+				employeeService.deleteByID((int) id);
 				count++;
 			}
 			return count;
 		} else {
 			return 0;
 		}
-		
+
+	}
+
+	@GetMapping("get-all-employee")
+	public Map<Long, IntergrationInfoPersonal> getAllEmployee(Principal principal, @RequestParam("page") int page) {
+		final int FUNCTION_ID = 11;
+		Users u = userService.findByUserName(principal.getName()).get();
+		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
+			List<Personal> lstPersonal = personalService.findByPage(page);
+			List<Employee> lstEmployee = employeeService.getPersonalBySegmentID(
+					(int) lstPersonal.get(0).getEmployee_ID(),
+					(int) lstPersonal.get(lstPersonal.size() - 1).getEmployee_ID());
+
+			// merge two list
+
+			Map<Long, IntergrationInfoPersonal> mergeLst = new HashMap<>();
+			for (Personal item : lstPersonal) {
+				mergeLst.put(item.getEmployee_ID(),
+						new IntergrationInfoPersonal(item.getEmployee_ID(), item.getFirst_Name(), item.getLast_Name(),
+								item.getMiddle_Initial(), item.getAddress1(), item.getAddress2(), item.getCity(),
+								item.getState(), item.getZip(), item.getEmail(), item.getPhone_Number(),
+								item.getSocial_Security_Number(), item.getSocial_Security_Number(),
+								item.getMarital_Status(), item.getGender(), item.getShareholder_Status(),
+								item.getEthnicity(), false, false));
+			}
+
+			for (Employee iEmployee : lstEmployee) {
+				if (mergeLst.containsKey(Long.valueOf(iEmployee.getPk().getEmployee_Number())) == true) {
+					mergeLst.get(Long.valueOf(iEmployee.getPk().getEmployee_Number())).setExist(true);
+
+					IntergrationInfoPersonal iPersonalTmp = mergeLst
+							.get(Long.parseLong(String.valueOf(iEmployee.getPk().getEmployee_Number())));
+
+					if (iEmployee.getFirst_Name().equals(iPersonalTmp.getFirst_Name())
+							&& iEmployee.getLast_Name().equals(iPersonalTmp.getLast_Name())) {
+						mergeLst.get(Long.valueOf(iEmployee.getPk().getEmployee_Number())).setSame(true);
+					}
+				}
+			}
+			return mergeLst;
+		} else {
+			return null;
+		}
 	}
 }

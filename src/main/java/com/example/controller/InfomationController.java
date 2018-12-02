@@ -45,7 +45,8 @@ public class InfomationController {
 		//check acess control
 		if(accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
 			List<Employee> lstEmployee = employeeService.findByPage(page);
-			List<Personal> lstPersonal = personalService.getPersonalBySegmentID(lstEmployee.get(0).getPk().getEmployee_Number(), lstEmployee.get(lstEmployee.size() - 1).getPk().getEmployee_Number());
+			List<Personal> lstPersonal = personalService.getPersonalBySegmentID(
+					lstEmployee.get(0).getPk().getEmployee_Number(), lstEmployee.get(lstEmployee.size() - 1).getPk().getEmployee_Number());
 			
 			// merge two list
 			

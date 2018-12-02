@@ -6,64 +6,66 @@ import javax.persistence.*;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.apache.commons.text.StringEscapeUtils;
+
 @Entity
-@Table(name="tb_function")
+@Table(name = "tb_function")
 public class Functions {
-	
+
 	@Id
-	@Column(name="function_id", nullable=false)
+	@Column(name = "function_id", nullable = false)
 	private int functionID;
-	
-	@Column(name="function_name", nullable=false)
+
+	@Column(name = "function_name", nullable = false)
 	private String functionName;
-	
-	@Column(name="module_id", nullable=false)
+
+	@Column(name = "module_id", nullable = false)
 	private int moduleId;
-	
-	@Column(name="image", nullable=false)
+
+	@Column(name = "image", nullable = false)
 	private String image;
-	
-	@Column(name="url", nullable=false)
+
+	@Column(name = "url", nullable = false)
 	private String url;
 
+	@Column(name = "isshow", nullable = false)
+	private boolean isshow;
+
 	@JsonIgnore
-	@JoinColumn(name="module_id", updatable=false, insertable=false)
-	@ManyToOne(fetch=FetchType.LAZY)
+	@JoinColumn(name = "module_id", updatable = false, insertable = false)
+	@ManyToOne(fetch = FetchType.LAZY)
 	private Modules module;
-	
+
 	@JsonIgnore
-	@OneToMany(mappedBy="function")
+	@OneToMany(mappedBy = "function")
 	private List<AccessControl> accessControls;
 
 	public int getFunctionID() {
 		return functionID;
 	}
-	
-	
+
+	public boolean isIsshow() {
+		return isshow;
+	}
+
+	public void setIsshow(boolean isshow) {
+		this.isshow = isshow;
+	}
 
 	public String getImage() {
 		return StringEscapeUtils.unescapeHtml4(image);
 	}
 
-
-
 	public void setImage(String image) {
 		this.image = image;
 	}
-
-
 
 	public String getUrl() {
 		return url;
 	}
 
-
-
 	public void setUrl(String url) {
 		this.url = url;
 	}
-
-
 
 	public void setFunctionID(int functionID) {
 		this.functionID = functionID;
