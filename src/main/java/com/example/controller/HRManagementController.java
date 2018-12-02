@@ -4,6 +4,7 @@ import java.security.Principal;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -64,7 +65,7 @@ public class HRManagementController {
 	}
 
 	@RequestMapping(value = "update-to-payrol", method = RequestMethod.POST)
-	@Transactional(rollbackFor = PersonalToEmployeePayrateException.class)
+	@Transactional(value = "ds1TransactionManager", rollbackFor = PersonalToEmployeePayrateException.class)
 	public Employee updateToPayrol(Principal principal, @RequestBody EmployeePayratesSet data) {
 		final int FUNCTION_ID = 17;
 		Users u = userService.findByUserName(principal.getName()).get();
@@ -86,23 +87,30 @@ public class HRManagementController {
 	@DeleteMapping("delete-employee/{id}")
 	public int deleteEmployee(Principal principal, @PathVariable long id) {
 		final int FUNCTION_ID = 11;
+		System.out.println("id la : " + id);
 		Users u = userService.findByUserName(principal.getName()).get();
 		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
 			int count = 0;
 			if (personalService.existsById(id) == true) {
+				System.out.println("ok thu 1");
 				personalService.deleteByID(id);
 				count++;
 			}
 
-			if (employeeService.existsById((int) id) == true) {
-				employeeService.deleteByID((int) id);
-				count++;
-			}
+//			if (employeeService.existsById((int) id) == true) {
+//				employeeService.deleteByID((int) id);
+//				count++;
+//			}
 			return count;
 		} else {
 			return 0;
 		}
 
+	}
+	
+	@GetMapping("get-peeonal")
+	public Optional<Personal> getPersonalByID(@RequestParam("id") long id) {
+		return personalService.findByID(id);
 	}
 
 	@GetMapping("get-all-employee")
