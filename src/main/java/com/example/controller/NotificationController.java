@@ -3,9 +3,7 @@ package com.example.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.Calendar;
-import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
 import java.util.TimeZone;
 
@@ -15,7 +13,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.example.custommodel.IntergrationTotalEarnings;
 import com.example.custommodel.ItemInfomation;
 import com.example.entitys1.Employee;
 import com.example.entitys2.Personal;

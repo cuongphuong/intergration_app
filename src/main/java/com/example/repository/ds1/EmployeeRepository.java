@@ -19,4 +19,7 @@ public interface EmployeeRepository  extends JpaRepository<Employee, Integer>{
 	
 	@Query("select c from Employee c where c.vacation_Days >= :day")
 	public List<Employee> getNgayNghi(@Param("day") int day);
+	
+	@Query("select c from Employee c where c.employee_Number = :id")
+	public Employee getByUsernamID(@Param("id") int id);
 }

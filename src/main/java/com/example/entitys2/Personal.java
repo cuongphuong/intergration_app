@@ -71,9 +71,9 @@ public class Personal implements Serializable{
 //	@JsonIgnore
 	private Employment employment;
 	
-	@ManyToOne(fetch=FetchType.LAZY)
+	@ManyToOne
 	@JoinColumn(name="Benefit_Plans", nullable=true, insertable=false, updatable=false)
-	@JsonIgnore
+//	@JsonIgnore
 	private BenefitPlan benefitPlan;
 	
 	@OneToMany(fetch=FetchType.LAZY, mappedBy="personal")

@@ -7,5 +7,6 @@ import com.example.entitys1.PayRates;
 
 @Repository("payRateRepository")
 public interface PayRateRepository extends CrudRepository<PayRates, Integer>{
-	
+//	@Query()
+//	public void deleteByUserName
 }	

@@ -3,6 +3,7 @@ package com.example.controller;
 import java.security.Principal;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.MediaType;
@@ -15,6 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.example.custommodel.UserRolesCreate;
@@ -43,7 +45,7 @@ public class SystemController {
 	@Transactional(value = "ds3TransactionManager", rollbackFor = AddUserAndRolesException.class)
 	@RequestMapping(value = "create-user", method = RequestMethod.POST, produces = MediaType.APPLICATION_JSON_VALUE)
 	public Iterable<AccessControl> saveUser(Principal principal, @RequestBody UserRolesCreate object) {
-		final int FUNCTION_ID = 13; //thêm user hệ thống
+		final int FUNCTION_ID = 13; // thêm user hệ thống
 		Users u = userService.findByUserName(principal.getName()).get();
 		// check permission
 		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
@@ -69,18 +71,32 @@ public class SystemController {
 		}
 	}
 
+	@RequestMapping(value = "update-user", method = RequestMethod.PUT, produces = MediaType.APPLICATION_JSON_VALUE)
+	public Users updateUser(Principal principal, @RequestBody Users object) {
+		final int FUNCTION_ID = 14; // update user hệ thống
+		Users u = userService.findByUserName(principal.getName()).get();
+		// check permission
+		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
+			Users res = userService.save(object);
+			return res;
+		} else {
+			// not access
+			return null;
+		}
+	}
+
 	@RequestMapping(value = "get-all-role", method = RequestMethod.GET)
 	public Iterable<Functions> findAllFunction() {
 		return functionService.findAll();
 	}
-	
+
 	@DeleteMapping("delete-user/{id}")
 	public boolean deleteUser(Principal principal, @PathVariable int id) {
 		final int FUNCTION_ID = 15; // xóa user hệ thống
 		Users u = userService.findByUserName(principal.getName()).get();
 		// check permission
 		Iterable<AccessControl> a = accessControlService.findAllRolesByUser(id);
-		
+
 		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
 //			if (userService.existsById(id) == true) {
 //				
@@ -94,10 +110,10 @@ public class SystemController {
 			return false;
 		}
 	}
-	
+
 	@GetMapping("lst-user")
 	public Iterable<Users> listUser(Principal principal) {
-		final int FUNCTION_ID = 18; //lấy danh sasch user
+		final int FUNCTION_ID = 18; // lấy danh sasch user
 		Users u = userService.findByUserName(principal.getName()).get();
 		// check permission
 		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
@@ -106,7 +122,12 @@ public class SystemController {
 			return null;
 		}
 	}
-	
+
+	@RequestMapping("get-uer-byid")
+	public Optional<Users> getUserByID(@RequestParam("id") int id) {
+		return userService.findByID(id);
+	}
+
 //	@PutMapping("update-access-control/{userid}")
 //	public void updateAccessControllForUser(@RequestBody, @PathVariable int id) {
 //		

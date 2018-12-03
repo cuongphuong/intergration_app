@@ -85,25 +85,27 @@ public class HRManagementController {
 	}
 
 	@DeleteMapping("delete-employee/{id}")
-	public int deleteEmployee(Principal principal, @PathVariable long id) {
+	public Employee deleteEmployee(Principal principal, @PathVariable long id) {
 		final int FUNCTION_ID = 11;
 		System.out.println("id la : " + id);
 		Users u = userService.findByUserName(principal.getName()).get();
 		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
 			int count = 0;
-			if (personalService.existsById(id) == true) {
-				System.out.println("ok thu 1");
-				personalService.deleteByID(id);
-				count++;
-			}
-
-//			if (employeeService.existsById((int) id) == true) {
-//				employeeService.deleteByID((int) id);
+//			if (personalService.existsById(id) == true) {
+//				System.out.println("ok thu 1");
+//				personalService.deleteByID(id);
 //				count++;
 //			}
-			return count;
+
+			if (employeeService.existsById((int) id) == true) {
+				Employee employee = employeeService.getByUserID((int)id);
+//				employeeService.deleteByID((int) id);
+				
+				count++;
+			}
+			return employee;
 		} else {
-			return 0;
+			return null;
 		}
 
 	}

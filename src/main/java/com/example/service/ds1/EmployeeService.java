@@ -46,4 +46,8 @@ public class EmployeeService {
 	public List<Employee> getNgayNghiQuaHan(int day){
 		return employeeRepository.getNgayNghi(day);
 	}
+	
+	public Employee getByUserID(int id) {
+		return employeeRepository.getByUsernamID(id);
+	}
 }
