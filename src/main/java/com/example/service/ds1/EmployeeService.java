@@ -42,4 +42,8 @@ public class EmployeeService {
 	public List<Employee> getPersonalBySegmentID(int firstID, int lastID){
 		return employeeRepository.getEmployeeBySegmentID(firstID, lastID);
 	}
+	
+	public List<Employee> getNgayNghiQuaHan(int day){
+		return employeeRepository.getNgayNghi(day);
+	}
 }

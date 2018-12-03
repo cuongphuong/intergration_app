@@ -18,4 +18,8 @@ public interface PersonalRepository extends CrudRepository<Personal, Long>{
 
 	@Query("select e from Personal e")
 	public List<Personal> findByPage(Pageable page);
+	
+	@Query("select c from Personal c join c.employment e where day(e.hire_Date) >= :day and month(e.hire_Date) = :month")
+	public List<Personal> kiNienViecLam(@Param("day") int day, @Param("month") int month);
+
 }

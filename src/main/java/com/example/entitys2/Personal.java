@@ -67,8 +67,8 @@ public class Personal implements Serializable{
 	
 	//end set relationship
 
-	@OneToOne(fetch=FetchType.LAZY, mappedBy="personal")
-	@JsonIgnore
+	@OneToOne(mappedBy="personal")
+//	@JsonIgnore
 	private Employment employment;
 	
 	@ManyToOne(fetch=FetchType.LAZY)

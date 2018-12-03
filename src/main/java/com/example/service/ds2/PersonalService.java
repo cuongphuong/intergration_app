@@ -43,4 +43,8 @@ public class PersonalService{
 	public List<Personal> findByPage(int page){
 		return personalRepository.findByPage(PageRequest.of(page, 5));
 	}
+	
+	public List<Personal> kiNiemViecLam(int day, int month){
+		return personalRepository.kiNienViecLam(day, month);
+	}
 }
