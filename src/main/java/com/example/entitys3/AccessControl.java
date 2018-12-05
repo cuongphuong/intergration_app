@@ -4,6 +4,8 @@ import java.io.Serializable;
 
 import javax.persistence.*;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 
 @Entity
 @Table(name="tb_access_control")
@@ -62,8 +64,23 @@ public class AccessControl implements Serializable{
 		// TODO Auto-generated constructor stub
 	}
 	
+	@JsonIgnore
+	public Functions getFunction() {
+		return function;
+	}
 	
-	
+	public void setFunction(Functions function) {
+		this.function = function;
+	}
+	@JsonIgnore
+	public Users getUser() {
+		return user;
+	}
+
+	public void setUser(Users user) {
+		this.user = user;
+	}
+
 	public AccessControlKey getAccessControlKey() {
 		return accessControlKey;
 	}
@@ -77,6 +94,21 @@ public class AccessControl implements Serializable{
 		this.accessControlKey = accessControlKey;
 		this.function = function;
 		this.user = user;
+		this.status = status;
+	}
+
+	public AccessControl(int functionID, int userID, boolean status) {
+		super();
+		this.functionID = functionID;
+		this.userID = userID;
+		this.status = status;
+	}
+
+	public AccessControl(int functionID, int userID, AccessControlKey accessControlKey, boolean status) {
+		super();
+		this.functionID = functionID;
+		this.userID = userID;
+		this.accessControlKey = accessControlKey;
 		this.status = status;
 	}
 }

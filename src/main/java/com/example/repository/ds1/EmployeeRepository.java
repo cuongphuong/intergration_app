@@ -22,4 +22,7 @@ public interface EmployeeRepository  extends JpaRepository<Employee, Integer>{
 	
 	@Query("select c from Employee c where c.employee_Number = :id")
 	public Employee getByUsernamID(@Param("id") int id);
+	
+	@Query("select count(c) from Employee c where c.employee_Number = :id")
+	public int checkExist(@Param("id") int id);
 }

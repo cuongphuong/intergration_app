@@ -41,4 +41,20 @@ public class AccessControlService {
 	public void deleteAllByList(Iterable<AccessControl> lst) {
 		accessControlRepository.deleteAll(lst);
 	}
+	
+	public boolean check(AccessControlKey key) {
+		return accessControlRepository.checkByDoubleKey(key.getFunctionID(), key.getUserID()) > 0;
+	}
+	
+	public Optional<AccessControl> findByDoubleKey(AccessControlKey key) {
+		return accessControlRepository.findByDoubleKey(key.getFunctionID(), key.getUserID());
+	}
+	
+	public void deleteByDoubleKey(AccessControlKey key) {
+		accessControlRepository.deleteByDoubleKey(key.getFunctionID(), key.getUserID());
+	}
+	
+	public void delete(AccessControl acc) {
+		accessControlRepository.delete(acc);
+	}
 }

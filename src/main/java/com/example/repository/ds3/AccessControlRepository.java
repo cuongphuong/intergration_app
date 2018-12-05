@@ -20,4 +20,10 @@ public interface AccessControlRepository extends CrudRepository<AccessControl, I
 	
 	@Query("update AccessControl a set a.status = :status where a.functionID = :function_id and a.userID = :user_id")
 	public void updateStatusByKey(@Param("status") boolean status, @Param("function_id") int functionID, @Param("user_id") int userID);
+	
+	@Query("select count(d) from AccessControl d where d.functionID = :function_id and d.userID = :user_id")
+	public int checkByDoubleKey(@Param("function_id") int functionID, @Param("user_id") int userID);
+	
+	@Query("delete from AccessControl d where d.functionID = :function_id and d.userID = :user_id")
+	public void deleteByDoubleKey(@Param("function_id") int functionID, @Param("user_id") int userID);
 }

@@ -50,4 +50,8 @@ public class EmployeeService {
 	public Employee getByUserID(int id) {
 		return employeeRepository.getByUsernamID(id);
 	}
+	
+	public boolean checkExist(int id) {
+		return employeeRepository.checkExist(id) > 0;
+	}
 }

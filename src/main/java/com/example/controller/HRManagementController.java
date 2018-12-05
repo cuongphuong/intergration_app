@@ -54,10 +54,27 @@ public class HRManagementController {
 
 	@RequestMapping(value = "add-employee", method = RequestMethod.POST)
 	public Personal addEmployee(Principal principal, @RequestBody Personal personal) {
-		final int FUNCTION_ID = 9; // thêm nhân viên mới
+		final int FUNCTION_ID = 9;
 		Users u = userService.findByUserName(principal.getName()).get();
 		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
 			Personal resPersonal = personalService.save(personal);
+			return resPersonal;
+		} else {
+			return null;
+		}
+	}
+	
+	@RequestMapping(value = "update-employee", method = RequestMethod.PUT)
+	public Personal upadteEmployee(Principal principal, @RequestBody Personal personal) {
+		final int FUNCTION_ID = 9;
+		Users u = userService.findByUserName(principal.getName()).get();
+		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
+			Personal resPersonal = personalService.save(personal);
+			
+			Employee employee = employeeService.getByUserID((int)resPersonal.getEmployee_ID());
+			employee.setFirst_Name(resPersonal.getFirst_Name());
+			employee.setLast_Name(resPersonal.getLast_Name());
+			employeeService.save(employee);
 			return resPersonal;
 		} else {
 			return null;
@@ -85,29 +102,28 @@ public class HRManagementController {
 	}
 
 	@DeleteMapping("delete-employee/{id}")
-	public Employee deleteEmployee(Principal principal, @PathVariable long id) {
+	public int deleteEmployee(Principal principal, @PathVariable long id) {
 		final int FUNCTION_ID = 11;
 		System.out.println("id la : " + id);
 		Users u = userService.findByUserName(principal.getName()).get();
 		if (accessControlService.checkAuthor(new AccessControlKey(FUNCTION_ID, u.getUserID())) == true) {
 			int count = 0;
-//			if (personalService.existsById(id) == true) {
-//				System.out.println("ok thu 1");
-//				personalService.deleteByID(id);
-//				count++;
-//			}
-
-			if (employeeService.existsById((int) id) == true) {
-				Employee employee = employeeService.getByUserID((int)id);
-//				employeeService.deleteByID((int) id);
-				
+			if (personalService.existsById(id) == true) {
+				personalService.deleteByID(id);
 				count++;
 			}
-			return employee;
-		} else {
-			return null;
-		}
 
+			if (employeeService.checkExist((int) id) == true) {
+				Employee employee = null;
+				employee = employeeService.getByUserID((int)id);
+				payRateService.deleteByID(employee.getPayRate().getIdPay_Rates());
+				employeeService.deleteByID((int) id);
+				count++;
+			}
+			return count;
+		} else {
+			return 0;
+		}
 	}
 	
 	@GetMapping("get-peeonal")

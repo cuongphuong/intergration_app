@@ -2,7 +2,9 @@ package com.example.controller;
 
 import java.security.Principal;
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,12 +15,15 @@ import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.example.custommodel.AccessControlResUpdate;
+import com.example.custommodel.AccessControlUpdate;
 import com.example.custommodel.UserRolesCreate;
 import com.example.entitys3.AccessControl;
 import com.example.entitys3.AccessControlKey;
@@ -126,6 +131,62 @@ public class SystemController {
 	@RequestMapping("get-uer-byid")
 	public Optional<Users> getUserByID(@RequestParam("id") int id) {
 		return userService.findByID(id);
+	}
+
+	@GetMapping("get-change-accessct")
+	public List<AccessControlResUpdate> returnAccessControl(@RequestParam("id") int id) {
+		Map<Integer, AccessControl> lstAccess = new HashMap<Integer, AccessControl>();
+		Iterable<AccessControl> lstTrue = accessControlService.findAllRolesByUser(id);
+
+		Iterable<Functions> funcs = functionService.findAll();
+
+		for (Functions item : funcs) {
+			lstAccess.put(Integer.parseInt(String.valueOf(id + item.getFunctionID())),
+					new AccessControl(item.getFunctionID(), id, false));
+		}
+
+		for (AccessControl itemTrue : lstTrue) {
+			if (lstAccess.containsKey(
+					Integer.parseInt(String.valueOf(itemTrue.getUserID() + itemTrue.getFunctionID()))) == true) {
+				lstAccess.get(Integer.parseInt(String.valueOf(itemTrue.getUserID() + itemTrue.getFunctionID())))
+						.setStatus(true);
+			}
+		}
+		
+		List<AccessControlResUpdate> lstRes = new ArrayList<>();
+		
+		for(AccessControl item : lstAccess.values()) {
+			Functions func = functionService.findByID(item.getFunctionID()).get();
+			lstRes.add(new AccessControlResUpdate(item.getFunctionID(),func.getFunctionName() , item.getUserID(), item.isStatus()));
+		}
+
+		return lstRes;
+	}
+
+	@PostMapping("update-access-control")
+	public boolean updateAccessControl(@RequestBody AccessControlUpdate updateAcc) {
+		List<AccessControl> lstAccess = updateAcc.getConvertToLstAccessControl();
+		List<AccessControl> lstUpdate = new ArrayList<>();
+		List<AccessControl> lstDelete = new ArrayList<>();
+		for (AccessControl item : lstAccess) {
+
+			if (accessControlService.check(item.getAccessControlKey()) == true) { // ton tai trong database
+				if (item.isStatus() == false) {
+					lstDelete.add(item);
+				}
+			} else { // không tồn tại
+				if(item.isStatus() == true) {
+					Functions function = functionService.findByID(item.getFunctionID()).get();
+					Users user = userService.findByID(item.getUserID()).get();
+					item.setFunction(function);
+					item.setUser(user);
+					lstUpdate.add(item);
+				}
+			}
+		}
+		if(lstUpdate.size() > 0) accessControlService.saveAll(lstUpdate);
+		if(lstDelete.size() > 0) accessControlService.deleteAllByList(lstDelete);
+		return true;
 	}
 
 //	@PutMapping("update-access-control/{userid}")

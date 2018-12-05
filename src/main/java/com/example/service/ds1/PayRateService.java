@@ -26,4 +26,8 @@ public class PayRateService {
 	public PayRates save(PayRates payrate) {
 		return payRateRepository.save(payrate);
 	}
+	
+	public void deleteByID(int id) {
+		payRateRepository.deleteById(id);
+	}
 }
